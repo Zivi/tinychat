@@ -5,7 +5,7 @@ function Input(props) {
     <input
       id="chat-input"
       type="text"
-      placeholder="add task and press enter to send"
+      placeholder="add text and press enter to send"
       onKeyDown={props.onKeyDown}
     />
   )

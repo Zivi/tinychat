@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import Input from './Input';
 import MessageList from './MessageList';
-
+import uuid from 'uuid/v4';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      chatList: {} // change to array of messages from chatList.messages
+      chatList: []
     }
   }
 
@@ -17,8 +17,8 @@ class App extends React.Component {
     .then((response) => response.json())
     .then(chatList => {
       this.setState({
-        chatList
-      })
+        chatList: chatList.messages
+      }, () => this.scrollToBottom());
     })
     .catch(function(error) {
       console.log(error);
@@ -27,28 +27,45 @@ class App extends React.Component {
 
   addItem(event) {
     if (event.key === 'Enter') {
-      // update state with text, user name, date stamp
+      var inputText = event.target.value;
+      if (inputText.length > 0) {
+        var currentMessages = this.state.chatList;
+        var currentMessageId = uuid();
+        this.setState({
+          chatList: currentMessages.concat({
+            id: currentMessageId,
+            author: 'me',
+            timestamp: Date.now(),
+            content: inputText
+          })
+        }, () => this.scrollToBottom());
+      }
+      event.target.value = '';
     }
   }
 
-  render() {
+  scrollToBottom() {
+    var scrollChat = document.getElementById('chat-list');
+    scrollChat.scrollTop = scrollChat.scrollHeight;
+  }
 
+  render() {
     return (
       <div>
         <h1>Tiny Chat</h1>
         <section id="chat-container">
-          {this.state.chatList.messages ?
-            this.state.chatList.messages.map((message) =>
-              <ul>
+          <ul id="chat-list">
+            {this.state.chatList ?
+              this.state.chatList.map((message) =>
                 <MessageList
                   key={message.id}
                   value={message.content}
                   author={message.author}
                   timestamp={new Date(message.timestamp).toLocaleTimeString()}
                 />
-              </ul>
-            )
-          : ''}
+              )
+            : ''}
+          </ul>
         </section>
         <Input onKeyDown={this.addItem.bind(this)}/>
       </div>
