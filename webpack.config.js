@@ -28,7 +28,8 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      title: 'tinychat'
+      title: 'tinychat',
+      template: 'template.ejs'
     }),
     new webpack.HashedModuleIdsPlugin(),
     new webpack.HotModuleReplacementPlugin(),

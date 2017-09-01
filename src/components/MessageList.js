@@ -2,11 +2,17 @@ import React from 'react';
 
 function MessageList(props) {
 
+  const { timestamp, author, value } = props;
+
   return (
     <li>
-      <span className="message-author">{props.author}</span> &nbsp;
-      <span className="message-time">{props.timestamp}</span><br/>
-      <span className="message-text">{props.value}</span>
+      <span className="message-author">{author}</span> &nbsp;
+      <span
+        title={timestamp.toDateString()}
+        className="message-time">{timestamp.toLocaleTimeString()}
+      </span>
+      <br/>
+      <span className="message-text">{value}</span>
     </li>
   )
 }
